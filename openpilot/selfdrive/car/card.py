@@ -26,6 +26,13 @@ from openpilot.sunnypilot.mads.helpers import set_alternative_experience, set_ca
 from openpilot.sunnypilot.selfdrive.car import interfaces as sunnypilot_interfaces
 from openpilot.sunnypilot.selfdrive.car.card_ext import CardExt
 
+# STEER-RATE patch: Toyota 方向盤轉速避錯門檻 100 -> 75 / Toyota steer-rate fault-avoidance threshold
+import opendbc.car.toyota.carcontroller as _toyota_cc  # noqa: E402
+if _toyota_cc.MAX_STEER_RATE == 100:
+  _toyota_cc.MAX_STEER_RATE = 75
+else:
+  cloudlog.warning(f'STEER-RATE patch: MAX_STEER_RATE is {_toyota_cc.MAX_STEER_RATE}, not 100; left unchanged')
+
 REPLAY = "REPLAY" in os.environ
 
 EventName = log.OnroadEvent.EventName
